@@ -1,59 +1,62 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CopyButton from '../components/CopyButton.astro';
+import Icon from '../components/Icon.astro';
 
 const installCommand = 'curl -fsSL https://raw.githubusercontent.com/lamngockhuong/utilux/main/install.sh | bash';
 
 const features = [
-  { icon: '⚡', title: 'Lazy Loading', description: 'Scripts downloaded on-demand. Minimal footprint.' },
-  { icon: '📦', title: '10 Scripts', description: 'System cleanup, Docker, Git, SSL checks, and more.' },
-  { icon: '🔒', title: 'Verified', description: 'SHA256 checksums for all scripts.' },
-  { icon: '🐧', title: 'Cross-Distro', description: 'Ubuntu, Debian, Fedora, Alpine supported.' },
-  { icon: '🖥️', title: 'Interactive TUI', description: 'Modern gum-powered menu interface.' },
-  { icon: '🚀', title: 'Dual CLI', description: 'Bash CLI + optional Go binary for performance.' }
+  { icon: 'zap' as const, title: 'Lazy Loading', description: 'Scripts downloaded on-demand. Minimal footprint.' },
+  { icon: 'package' as const, title: '10 Scripts', description: 'System cleanup, Docker, Git, SSL checks, and more.' },
+  { icon: 'shield-check' as const, title: 'Verified', description: 'SHA256 checksums for all scripts.' },
+  { icon: 'terminal' as const, title: 'Cross-Distro', description: 'Ubuntu, Debian, Fedora, Alpine supported.' },
+  { icon: 'layout-grid' as const, title: 'Interactive TUI', description: 'Modern gum-powered menu interface.' },
+  { icon: 'rocket' as const, title: 'Dual CLI', description: 'Bash CLI + optional Go binary for performance.' }
 ];
 ---
 
 <BaseLayout title="Home">
   <section class="py-20 md:py-32">
     <div class="container text-center">
-      <h1 class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
         Linux utilities,<br />on demand
       </h1>
-      <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
+      <p class="text-xl text-muted max-w-2xl mx-auto mb-10">
         A lightweight script aggregator with lazy loading. Run powerful utilities without bloating your system.
       </p>
 
-      <div class="max-w-2xl mx-auto mb-10">
-        <div class="flex items-center gap-2 bg-slate-800 rounded-lg p-4 font-mono text-sm">
-          <span class="text-slate-500">$</span>
-          <code class="flex-1 text-left text-emerald-400 overflow-x-auto">{installCommand}</code>
-          <CopyButton text={installCommand} />
+      <div class="max-w-3xl mx-auto mb-10">
+        <div class="bg-surface rounded-xl p-4 font-mono text-sm border border-slate-700/50">
+          <div class="flex items-start gap-3">
+            <span class="text-muted select-none shrink-0">$</span>
+            <code class="flex-1 text-left text-accent break-all">{installCommand}</code>
+            <CopyButton text={installCommand} />
+          </div>
         </div>
       </div>
 
       <div class="flex flex-wrap justify-center gap-4">
-        <a href="/catalog" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition">Browse Scripts</a>
-        <a href="/docs" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition">Documentation</a>
+        <a href="/catalog" class="px-6 py-3 bg-cta hover:bg-primary text-white rounded-lg font-medium transition-colors duration-200 cursor-pointer">Browse Scripts</a>
+        <a href="/docs" class="px-6 py-3 bg-surface hover:bg-slate-600 text-white rounded-lg font-medium transition-colors duration-200 border border-slate-700 cursor-pointer">Documentation</a>
       </div>
     </div>
   </section>
 
-  <section class="py-16 bg-slate-800/30">
+  <section class="py-16 bg-surface/30">
     <div class="container">
       <h2 class="text-2xl font-bold text-center mb-10">Quick Start</h2>
       <div class="max-w-2xl mx-auto space-y-4">
-        <div class="bg-slate-800 rounded-lg p-4">
-          <p class="text-slate-400 text-sm mb-2"># Launch interactive TUI menu</p>
-          <code class="text-emerald-400">utilux</code>
+        <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+          <p class="text-muted text-sm mb-2 font-mono"># Launch interactive TUI menu</p>
+          <code class="text-accent font-mono">utilux</code>
         </div>
-        <div class="bg-slate-800 rounded-lg p-4">
-          <p class="text-slate-400 text-sm mb-2"># List available scripts</p>
-          <code class="text-emerald-400">utilux list</code>
+        <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+          <p class="text-muted text-sm mb-2 font-mono"># List available scripts</p>
+          <code class="text-accent font-mono">utilux list</code>
         </div>
-        <div class="bg-slate-800 rounded-lg p-4">
-          <p class="text-slate-400 text-sm mb-2"># Run a script</p>
-          <code class="text-emerald-400">utilux run git-clean</code>
+        <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+          <p class="text-muted text-sm mb-2 font-mono"># Run a script</p>
+          <code class="text-accent font-mono">utilux run git-clean</code>
         </div>
       </div>
     </div>
@@ -64,10 +67,12 @@ const features = [
       <h2 class="text-2xl font-bold text-center mb-10">Why Utilux?</h2>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {features.map(f => (
-          <div class="p-6 bg-slate-800/50 rounded-lg border border-slate-700">
-            <div class="text-3xl mb-3">{f.icon}</div>
+          <div class="p-6 bg-surface/50 rounded-xl border border-slate-700/50 hover:border-primary/50 transition-colors duration-200 cursor-pointer group">
+            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-200">
+              <Icon name={f.icon} class="w-6 h-6 text-primary" />
+            </div>
             <h3 class="font-semibold text-lg mb-2">{f.title}</h3>
-            <p class="text-slate-400 text-sm">{f.description}</p>
+            <p class="text-muted text-sm">{f.description}</p>
           </div>
         ))}
       </div>

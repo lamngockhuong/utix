@@ -1,1 +1,48 @@
+/* Typography - Developer Tools */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @import "tailwindcss";
+
+@theme {
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Dark Mode OLED Palette */
+  --color-primary: #3B82F6;
+  --color-secondary: #1E293B;
+  --color-cta: #2563EB;
+  --color-background: #0F172A;
+  --color-surface: #1E293B;
+  --color-text: #F1F5F9;
+  --color-muted: #94A3B8;
+  --color-accent: #10B981;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -9,8 +9,8 @@ interface Props {
 const { name, description, category, tags = [] } = Astro.props;
 
 const categoryColors: Record<string, string> = {
-  system: 'bg-blue-500/20 text-blue-400',
-  dev: 'bg-green-500/20 text-green-400',
+  system: 'bg-primary/20 text-primary',
+  dev: 'bg-accent/20 text-accent',
   automation: 'bg-purple-500/20 text-purple-400',
   network: 'bg-orange-500/20 text-orange-400',
 };
@@ -18,25 +18,25 @@ const categoryColors: Record<string, string> = {
 
 <a
   href={`/catalog/${name}`}
-  class="block p-5 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 rounded-lg transition group"
+  class="block p-5 bg-surface/50 hover:bg-surface border border-slate-700/50 hover:border-primary/50 rounded-xl transition-colors duration-200 group cursor-pointer"
 >
   <div class="flex items-start justify-between gap-3 mb-3">
-    <h3 class="font-semibold text-lg text-white group-hover:text-blue-400 transition">
+    <h3 class="font-semibold text-lg text-text group-hover:text-primary transition-colors duration-200">
       {name}
     </h3>
-    <span class:list={["px-2 py-0.5 rounded text-xs font-medium", categoryColors[category] || 'bg-slate-700 text-slate-300']}>
+    <span class:list={["px-2 py-0.5 rounded-md text-xs font-medium", categoryColors[category] || 'bg-surface text-muted']}>
       {category}
     </span>
   </div>
 
-  <p class="text-slate-400 text-sm mb-3 line-clamp-2">
+  <p class="text-muted text-sm mb-3 line-clamp-2">
     {description}
   </p>
 
   {tags.length > 0 && (
     <div class="flex flex-wrap gap-1">
       {tags.map(tag => (
-        <span class="px-2 py-0.5 bg-slate-700/50 text-slate-400 rounded text-xs">
+        <span class="px-2 py-0.5 bg-surface text-muted rounded-md text-xs">
           {tag}
         </span>
       ))}

@@ -11,7 +11,7 @@ const categories = [...new Set(scripts.map(s => s.category))].sort();
   <section class="py-12">
     <div class="container">
       <h1 class="text-3xl font-bold mb-2">Script Catalog</h1>
-      <p class="text-slate-400 mb-8">{scripts.length} scripts available</p>
+      <p class="text-muted mb-8">{scripts.length} scripts available</p>
 
       <!-- Search -->
       <div class="mb-8">
@@ -19,17 +19,17 @@ const categories = [...new Set(scripts.map(s => s.category))].sort();
           type="search"
           id="search"
           placeholder="Search scripts..."
-          class="w-full max-w-md px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+          class="w-full max-w-md px-4 py-3 bg-surface border border-slate-700/50 rounded-xl text-text placeholder-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors duration-200"
         />
       </div>
 
       <!-- Category filters -->
       <div class="flex flex-wrap gap-2 mb-8">
-        <button class="category-btn active px-3 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white" data-category="all">
+        <button class="category-btn active px-4 py-2 rounded-full text-sm font-medium bg-cta text-white cursor-pointer transition-colors duration-200" data-category="all">
           All
         </button>
         {categories.map(cat => (
-          <button class="category-btn px-3 py-1.5 rounded-full text-sm font-medium bg-slate-700 text-slate-300 hover:bg-slate-600" data-category={cat}>
+          <button class="category-btn px-4 py-2 rounded-full text-sm font-medium bg-surface text-muted hover:bg-surface/80 hover:text-text cursor-pointer transition-colors duration-200" data-category={cat}>
             {cat}
           </button>
         ))}
@@ -49,7 +49,7 @@ const categories = [...new Set(scripts.map(s => s.category))].sort();
         ))}
       </div>
 
-      <p id="no-results" class="hidden text-center text-slate-400 py-8">
+      <p id="no-results" class="hidden text-center text-muted py-8">
         No scripts found matching your search.
       </p>
     </div>
@@ -94,11 +94,11 @@ const categories = [...new Set(scripts.map(s => s.category))].sort();
     categoryBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         categoryBtns.forEach(b => {
-          b.classList.remove('active', 'bg-blue-600', 'text-white');
-          b.classList.add('bg-slate-700', 'text-slate-300');
+          b.classList.remove('active', 'bg-cta', 'text-white');
+          b.classList.add('bg-surface', 'text-muted');
         });
-        btn.classList.add('active', 'bg-blue-600', 'text-white');
-        btn.classList.remove('bg-slate-700', 'text-slate-300');
+        btn.classList.add('active', 'bg-cta', 'text-white');
+        btn.classList.remove('bg-surface', 'text-muted');
         currentCategory = btn.getAttribute('data-category') || 'all';
         filterScripts();
       });

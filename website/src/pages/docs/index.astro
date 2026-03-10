@@ -10,60 +10,60 @@ const installCommand = 'curl -fsSL https://raw.githubusercontent.com/lamngockhuo
     <div class="container max-w-3xl">
       <h1 class="text-3xl font-bold mb-8">Documentation</h1>
 
-      <nav class="bg-slate-800/50 rounded-lg p-4 mb-8">
-        <h2 class="font-semibold mb-2 text-slate-300">Contents</h2>
-        <ul class="space-y-1 text-blue-400">
-          <li><a href="#installation" class="hover:text-blue-300">Installation</a></li>
-          <li><a href="#usage" class="hover:text-blue-300">Usage</a></li>
-          <li><a href="#commands" class="hover:text-blue-300">Commands</a></li>
-          <li><a href="#go-cli" class="hover:text-blue-300">Go CLI (Optional)</a></li>
-          <li><a href="#configuration" class="hover:text-blue-300">Configuration</a></li>
-          <li><a href="#contributing" class="hover:text-blue-300">Contributing</a></li>
+      <nav class="bg-surface/50 rounded-xl p-5 mb-8 border border-slate-700/50">
+        <h2 class="font-semibold mb-3 text-muted">Contents</h2>
+        <ul class="space-y-2 text-primary">
+          <li><a href="#installation" class="hover:text-accent transition-colors duration-200 cursor-pointer">Installation</a></li>
+          <li><a href="#usage" class="hover:text-accent transition-colors duration-200 cursor-pointer">Usage</a></li>
+          <li><a href="#commands" class="hover:text-accent transition-colors duration-200 cursor-pointer">Commands</a></li>
+          <li><a href="#go-cli" class="hover:text-accent transition-colors duration-200 cursor-pointer">Go CLI (Optional)</a></li>
+          <li><a href="#configuration" class="hover:text-accent transition-colors duration-200 cursor-pointer">Configuration</a></li>
+          <li><a href="#contributing" class="hover:text-accent transition-colors duration-200 cursor-pointer">Contributing</a></li>
         </ul>
       </nav>
 
       <!-- Installation -->
       <section id="installation" class="mb-12">
         <h2 class="text-2xl font-bold mb-4">Installation</h2>
-        <p class="text-slate-300 mb-4">Install Utilux with a single command:</p>
-        <div class="bg-slate-800 rounded-lg p-4 mb-4">
-          <div class="flex items-center gap-2">
-            <code class="flex-1 text-emerald-400 font-mono text-sm">{installCommand}</code>
+        <p class="text-text/90 mb-4">Install Utilux with a single command:</p>
+        <div class="bg-surface rounded-xl p-4 mb-4 border border-slate-700/50">
+          <div class="flex items-center gap-3">
+            <code class="flex-1 text-accent font-mono text-sm">{installCommand}</code>
             <CopyButton text={installCommand} />
           </div>
         </div>
-        <p class="text-slate-400 text-sm">Requirements: bash, curl</p>
+        <p class="text-muted text-sm">Requirements: bash, curl</p>
       </section>
 
       <!-- Usage -->
       <section id="usage" class="mb-12">
         <h2 class="text-2xl font-bold mb-4">Usage</h2>
-        <p class="text-slate-300 mb-4">Utilux uses lazy loading - scripts are downloaded on first use and cached locally.</p>
+        <p class="text-text/90 mb-4">Utilux uses lazy loading - scripts are downloaded on first use and cached locally.</p>
 
         <div class="space-y-4">
-          <div class="bg-slate-800 rounded-lg p-4">
-            <p class="text-slate-400 text-sm mb-2"># Launch interactive TUI menu</p>
-            <code class="text-emerald-400">utilux</code>
+          <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+            <p class="text-muted text-sm mb-2 font-mono"># Launch interactive TUI menu</p>
+            <code class="text-accent font-mono">utilux</code>
           </div>
 
-          <div class="bg-slate-800 rounded-lg p-4">
-            <p class="text-slate-400 text-sm mb-2"># List all available scripts</p>
-            <code class="text-emerald-400">utilux list</code>
+          <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+            <p class="text-muted text-sm mb-2 font-mono"># List all available scripts</p>
+            <code class="text-accent font-mono">utilux list</code>
           </div>
 
-          <div class="bg-slate-800 rounded-lg p-4">
-            <p class="text-slate-400 text-sm mb-2"># Run a script</p>
-            <code class="text-emerald-400">utilux run git-clean</code>
+          <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+            <p class="text-muted text-sm mb-2 font-mono"># Run a script</p>
+            <code class="text-accent font-mono">utilux run git-clean</code>
           </div>
 
-          <div class="bg-slate-800 rounded-lg p-4">
-            <p class="text-slate-400 text-sm mb-2"># Search for scripts</p>
-            <code class="text-emerald-400">utilux search docker</code>
+          <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+            <p class="text-muted text-sm mb-2 font-mono"># Search for scripts</p>
+            <code class="text-accent font-mono">utilux search docker</code>
           </div>
 
-          <div class="bg-slate-800 rounded-lg p-4">
-            <p class="text-slate-400 text-sm mb-2"># Get script info</p>
-            <code class="text-emerald-400">utilux info disk-cleanup</code>
+          <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+            <p class="text-muted text-sm mb-2 font-mono"># Get script info</p>
+            <code class="text-accent font-mono">utilux info disk-cleanup</code>
           </div>
         </div>
       </section>
@@ -71,42 +71,42 @@ const installCommand = 'curl -fsSL https://raw.githubusercontent.com/lamngockhuo
       <!-- Commands -->
       <section id="commands" class="mb-12">
         <h2 class="text-2xl font-bold mb-4">Commands</h2>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto bg-surface/30 rounded-xl border border-slate-700/50">
           <table class="w-full text-left">
             <thead>
-              <tr class="border-b border-slate-700">
-                <th class="py-2 pr-4">Command</th>
-                <th class="py-2">Description</th>
+              <tr class="border-b border-slate-700/50">
+                <th class="py-3 px-4 text-muted font-medium">Command</th>
+                <th class="py-3 px-4 text-muted font-medium">Description</th>
               </tr>
             </thead>
-            <tbody class="text-slate-300">
-              <tr class="border-b border-slate-800">
-                <td class="py-2 pr-4 font-mono text-sm">run &lt;script&gt;</td>
-                <td class="py-2">Run a script (downloads on first use)</td>
+            <tbody class="text-text/90">
+              <tr class="border-b border-slate-800/50">
+                <td class="py-3 px-4 font-mono text-sm text-accent">run &lt;script&gt;</td>
+                <td class="py-3 px-4">Run a script (downloads on first use)</td>
               </tr>
-              <tr class="border-b border-slate-800">
-                <td class="py-2 pr-4 font-mono text-sm">list [category]</td>
-                <td class="py-2">List available scripts</td>
+              <tr class="border-b border-slate-800/50">
+                <td class="py-3 px-4 font-mono text-sm text-accent">list [category]</td>
+                <td class="py-3 px-4">List available scripts</td>
               </tr>
-              <tr class="border-b border-slate-800">
-                <td class="py-2 pr-4 font-mono text-sm">search &lt;query&gt;</td>
-                <td class="py-2">Search scripts by name/description</td>
+              <tr class="border-b border-slate-800/50">
+                <td class="py-3 px-4 font-mono text-sm text-accent">search &lt;query&gt;</td>
+                <td class="py-3 px-4">Search scripts by name/description</td>
               </tr>
-              <tr class="border-b border-slate-800">
-                <td class="py-2 pr-4 font-mono text-sm">info &lt;script&gt;</td>
-                <td class="py-2">Show script details</td>
+              <tr class="border-b border-slate-800/50">
+                <td class="py-3 px-4 font-mono text-sm text-accent">info &lt;script&gt;</td>
+                <td class="py-3 px-4">Show script details</td>
               </tr>
-              <tr class="border-b border-slate-800">
-                <td class="py-2 pr-4 font-mono text-sm">update [--all]</td>
-                <td class="py-2">Update cached scripts</td>
+              <tr class="border-b border-slate-800/50">
+                <td class="py-3 px-4 font-mono text-sm text-accent">update [--all]</td>
+                <td class="py-3 px-4">Update cached scripts</td>
               </tr>
-              <tr class="border-b border-slate-800">
-                <td class="py-2 pr-4 font-mono text-sm">cache list|clear|size</td>
-                <td class="py-2">Manage local cache</td>
+              <tr class="border-b border-slate-800/50">
+                <td class="py-3 px-4 font-mono text-sm text-accent">cache list|clear|size</td>
+                <td class="py-3 px-4">Manage local cache</td>
               </tr>
               <tr>
-                <td class="py-2 pr-4 font-mono text-sm">config [key] [value]</td>
-                <td class="py-2">View/set configuration</td>
+                <td class="py-3 px-4 font-mono text-sm text-accent">config [key] [value]</td>
+                <td class="py-3 px-4">View/set configuration</td>
               </tr>
             </tbody>
           </table>
@@ -116,10 +116,10 @@ const installCommand = 'curl -fsSL https://raw.githubusercontent.com/lamngockhuo
       <!-- Go CLI -->
       <section id="go-cli" class="mb-12">
         <h2 class="text-2xl font-bold mb-4">Go CLI (Optional)</h2>
-        <p class="text-slate-300 mb-4">For better performance, you can use the Go-based CLI. It's a single binary with no dependencies.</p>
+        <p class="text-text/90 mb-4">For better performance, you can use the Go-based CLI. It's a single binary with no dependencies.</p>
 
-        <h3 class="font-semibold mt-6 mb-2">Advantages over Bash CLI</h3>
-        <ul class="list-disc list-inside space-y-1 text-slate-300 mb-4">
+        <h3 class="font-semibold mt-6 mb-3 text-text">Advantages over Bash CLI</h3>
+        <ul class="list-disc list-inside space-y-1 text-text/90 mb-4">
           <li>Single binary - no interpreter needed</li>
           <li>Faster startup time (~ms vs ~100ms)</li>
           <li>Native concurrency for parallel downloads</li>
@@ -127,15 +127,15 @@ const installCommand = 'curl -fsSL https://raw.githubusercontent.com/lamngockhuo
           <li>Cross-platform binaries available</li>
         </ul>
 
-        <h3 class="font-semibold mt-6 mb-2">Installation</h3>
+        <h3 class="font-semibold mt-6 mb-3 text-text">Installation</h3>
         <div class="space-y-4">
-          <div class="bg-slate-800 rounded-lg p-4">
-            <p class="text-slate-400 text-sm mb-2"># Build from source (requires Go 1.21+)</p>
-            <code class="text-emerald-400">cd cli && go build -o utilux-go .</code>
+          <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+            <p class="text-muted text-sm mb-2 font-mono"># Build from source (requires Go 1.21+)</p>
+            <code class="text-accent font-mono">cd cli && go build -o utilux-go .</code>
           </div>
-          <div class="bg-slate-800 rounded-lg p-4">
-            <p class="text-slate-400 text-sm mb-2"># Or download pre-built binary</p>
-            <code class="text-emerald-400">curl -fsSL https://github.com/lamngockhuong/utilux/releases/latest/download/utilux-go-linux-amd64 -o utilux-go</code>
+          <div class="bg-surface rounded-xl p-4 border border-slate-700/50">
+            <p class="text-muted text-sm mb-2 font-mono"># Or download pre-built binary</p>
+            <code class="text-accent font-mono text-sm">curl -fsSL https://github.com/lamngockhuong/utilux/releases/latest/download/utilux-go-linux-amd64 -o utilux-go</code>
           </div>
         </div>
       </section>
@@ -143,29 +143,29 @@ const installCommand = 'curl -fsSL https://raw.githubusercontent.com/lamngockhuo
       <!-- Configuration -->
       <section id="configuration" class="mb-12">
         <h2 class="text-2xl font-bold mb-4">Configuration</h2>
-        <p class="text-slate-300 mb-4">Configuration is stored in <code class="bg-slate-800 px-1 rounded">~/.utilux/config</code></p>
+        <p class="text-text/90 mb-4">Configuration is stored in <code class="bg-surface px-2 py-0.5 rounded-md font-mono text-accent text-sm">~/.utilux/config</code></p>
 
-        <h3 class="font-semibold mt-6 mb-2">Environment Variables</h3>
-        <div class="overflow-x-auto">
+        <h3 class="font-semibold mt-6 mb-3 text-text">Environment Variables</h3>
+        <div class="overflow-x-auto bg-surface/30 rounded-xl border border-slate-700/50">
           <table class="w-full text-left">
             <thead>
-              <tr class="border-b border-slate-700">
-                <th class="py-2 pr-4">Variable</th>
-                <th class="py-2">Description</th>
+              <tr class="border-b border-slate-700/50">
+                <th class="py-3 px-4 text-muted font-medium">Variable</th>
+                <th class="py-3 px-4 text-muted font-medium">Description</th>
               </tr>
             </thead>
-            <tbody class="text-slate-300">
-              <tr class="border-b border-slate-800">
-                <td class="py-2 pr-4 font-mono text-sm">UTILUX_OFFLINE</td>
-                <td class="py-2">Enable offline mode (use cached only)</td>
+            <tbody class="text-text/90">
+              <tr class="border-b border-slate-800/50">
+                <td class="py-3 px-4 font-mono text-sm text-accent">UTILUX_OFFLINE</td>
+                <td class="py-3 px-4">Enable offline mode (use cached only)</td>
               </tr>
-              <tr class="border-b border-slate-800">
-                <td class="py-2 pr-4 font-mono text-sm">UTILUX_LOG_LEVEL</td>
-                <td class="py-2">Log level: debug, info, warn, error</td>
+              <tr class="border-b border-slate-800/50">
+                <td class="py-3 px-4 font-mono text-sm text-accent">UTILUX_LOG_LEVEL</td>
+                <td class="py-3 px-4">Log level: debug, info, warn, error</td>
               </tr>
               <tr>
-                <td class="py-2 pr-4 font-mono text-sm">UTILUX_CACHE_DIR</td>
-                <td class="py-2">Custom cache directory</td>
+                <td class="py-3 px-4 font-mono text-sm text-accent">UTILUX_CACHE_DIR</td>
+                <td class="py-3 px-4">Custom cache directory</td>
               </tr>
             </tbody>
           </table>
@@ -175,18 +175,18 @@ const installCommand = 'curl -fsSL https://raw.githubusercontent.com/lamngockhuo
       <!-- Contributing -->
       <section id="contributing" class="mb-12">
         <h2 class="text-2xl font-bold mb-4">Contributing</h2>
-        <p class="text-slate-300 mb-4">Want to add a script? Contributions are welcome!</p>
+        <p class="text-text/90 mb-4">Want to add a script? Contributions are welcome!</p>
 
-        <ol class="list-decimal list-inside space-y-2 text-slate-300">
+        <ol class="list-decimal list-inside space-y-2 text-text/90">
           <li>Fork the repository</li>
-          <li>Create your script in <code class="bg-slate-800 px-1 rounded">registry/&lt;category&gt;/</code></li>
+          <li>Create your script in <code class="bg-surface px-2 py-0.5 rounded-md font-mono text-accent text-sm">registry/&lt;category&gt;/</code></li>
           <li>Add script metadata header</li>
-          <li>Run <code class="bg-slate-800 px-1 rounded">./scripts/generate-manifest.sh</code></li>
+          <li>Run <code class="bg-surface px-2 py-0.5 rounded-md font-mono text-accent text-sm">./scripts/generate-manifest.sh</code></li>
           <li>Submit a pull request</li>
         </ol>
 
-        <h3 class="font-semibold mt-6 mb-2">Script Template</h3>
-        <pre class="bg-slate-800 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-emerald-400">#!/bin/bash
+        <h3 class="font-semibold mt-6 mb-3 text-text">Script Template</h3>
+        <pre class="bg-surface rounded-xl p-4 text-sm overflow-x-auto border border-slate-700/50"><code class="text-accent font-mono">#!/bin/bash
 # @name: script-name
 # @version: v1.0.0
 # @description: Brief description
@@ -204,8 +204,8 @@ main() &#123;
 main "$@"</code></pre>
       </section>
 
-      <div class="border-t border-slate-700 pt-6">
-        <a href="https://github.com/lamngockhuong/utilux" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">
+      <div class="border-t border-slate-700/50 pt-6">
+        <a href="https://github.com/lamngockhuong/utilux" target="_blank" rel="noopener" class="text-primary hover:text-accent transition-colors duration-200 cursor-pointer font-medium">
           View on GitHub &rarr;
         </a>
       </div>
