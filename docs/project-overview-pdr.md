@@ -33,7 +33,7 @@ Utilux is a unified Linux utility management system that provides curated, produ
 
 **Bash CLI** (`utilux`):
 
-- Interactive whiptail-based menu system
+- Interactive gum-based menu system (whiptail fallback)
 - Zero dependencies beyond bash, curl
 - Modular library architecture (lib/)
 
@@ -182,7 +182,7 @@ Utilux is a unified Linux utility management system that provides curated, produ
 - bash 4.0+
 - curl
 - jq (optional, enhances JSON parsing)
-- whiptail (optional, enables interactive menu)
+- gum (optional, modern TUI) or whiptail (legacy)
 
 **Development Dependencies:**
 

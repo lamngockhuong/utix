@@ -110,7 +110,7 @@ cd cli && go build -o utilux-go .
 
 - Bash 4.0+
 - curl
-- Optional: jq (better JSON parsing), whiptail (interactive UI)
+- Optional: jq (better JSON parsing), [gum](https://github.com/charmbracelet/gum) (modern TUI) or whiptail (legacy TUI)
 - Go 1.22+ (for Go CLI)
 - Docker or Podman (for development containers)
 

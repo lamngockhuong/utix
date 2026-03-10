@@ -45,7 +45,7 @@ Open an issue with:
 
 - Bash 4.0+
 - curl
-- Optional: jq, whiptail
+- Optional: jq, gum (or whiptail)
 - Go 1.22+ (for Go CLI)
 - Podman or Docker (for containers)
 
@@ -64,10 +64,15 @@ make dev DISTRO=fedora      # Fedora
 
 # Install dependencies (inside container)
 # Alpine
-apk add --no-cache bash curl whiptail jq
+apk add --no-cache bash curl gum jq
 
 # Ubuntu/Debian
-apt update && apt install -y curl whiptail jq
+apt update && apt install -y curl jq
+# Install gum (optional, for modern TUI)
+mkdir -p /etc/apt/keyrings
+curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
+apt update && apt install -y gum
 
 # Run the tool
 chmod +x utilux && ./utilux

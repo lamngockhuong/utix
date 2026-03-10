@@ -7,14 +7,14 @@
 [[ -n "${_UTILUX_UI_LOADED:-}" ]] && return 0
 _UTILUX_UI_LOADED=1
 
-# Check if whiptail is available
-_has_whiptail() {
-  has_cmd whiptail
+# Check if gum is available (modern TUI)
+_has_gum() {
+  has_cmd gum
 }
 
-# Check if dialog is available
-_has_dialog() {
-  has_cmd dialog
+# Check if whiptail is available (legacy fallback)
+_has_whiptail() {
+  has_cmd whiptail
 }
 
 # Show spinner while process is running
@@ -32,22 +32,30 @@ ui_spinner() {
   printf "\r\033[K"  # Clear line
 }
 
-# Confirm prompt (yes/no)
+# Confirm prompt (gum > simple)
 ui_confirm() {
   local msg="$1"
   local default="${2:-n}"
 
-  local prompt
-  if [[ "$default" == "y" ]]; then
-    prompt="[Y/n]"
+  if _has_gum && [[ -t 0 ]]; then
+    if [[ "$default" == "y" ]]; then
+      gum confirm "$msg" --default=true
+    else
+      gum confirm "$msg" --default=false
+    fi
   else
-    prompt="[y/N]"
+    local prompt
+    if [[ "$default" == "y" ]]; then
+      prompt="[Y/n]"
+    else
+      prompt="[y/N]"
+    fi
+
+    read -r -p "$msg $prompt " response
+    response="${response:-$default}"
+
+    [[ "$response" =~ ^[Yy] ]]
   fi
-
-  read -r -p "$msg $prompt " response
-  response="${response:-$default}"
-
-  [[ "$response" =~ ^[Yy] ]]
 }
 
 # Simple selection menu (fallback)
@@ -76,13 +84,16 @@ _ui_select_simple() {
   return 1
 }
 
-# Selection menu (uses whiptail if available)
+# Selection menu (gum > whiptail > simple)
 ui_select() {
   local title="$1"
   shift
   local options=("$@")
 
-  if _has_whiptail && [[ -t 0 ]]; then
+  if _has_gum && [[ -t 0 ]]; then
+    echo "$title" >&2
+    gum choose "${options[@]}"
+  elif _has_whiptail && [[ -t 0 ]]; then
     local menu_options=()
     local i=1
     for opt in "${options[@]}"; do
@@ -103,12 +114,14 @@ ui_select() {
   fi
 }
 
-# Input prompt
+# Input prompt (gum > whiptail > simple)
 ui_input() {
   local msg="$1"
   local default="${2:-}"
 
-  if _has_whiptail && [[ -t 0 ]]; then
+  if _has_gum && [[ -t 0 ]]; then
+    gum input --placeholder "$msg" --value "$default"
+  elif _has_whiptail && [[ -t 0 ]]; then
     whiptail --title "Utilux" --inputbox "$msg" 10 60 "$default" 3>&1 1>&2 2>&3
   else
     local input
@@ -122,12 +135,16 @@ ui_input() {
   fi
 }
 
-# Message box
+# Message box (gum > whiptail > simple)
 ui_message() {
   local title="$1"
   local msg="$2"
+  # Strip ANSI codes for TUI display
+  msg=$(echo -e "$msg" | sed 's/\x1b\[[0-9;]*m//g')
 
-  if _has_whiptail && [[ -t 0 ]]; then
+  if _has_gum && [[ -t 0 ]]; then
+    echo -e "[$title]\n\n$msg" | gum style --border rounded --padding "1 2" --border-foreground 212
+  elif _has_whiptail && [[ -t 0 ]]; then
     whiptail --title "$title" --msgbox "$msg" 10 60
   else
     echo "=== $title ===" >&2

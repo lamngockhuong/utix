@@ -16,8 +16,8 @@ make dev DISTRO=alpine      # Alpine Linux
 make dev DISTRO=fedora      # Fedora
 
 # Inside container: install dependencies
-apk add --no-cache bash curl whiptail   # Alpine
-apt update && apt install -y curl whiptail bash  # Ubuntu/Debian
+apk add --no-cache bash curl gum   # Alpine (gum for modern TUI)
+apt update && apt install -y curl bash  # Ubuntu/Debian (install gum separately)
 
 # Run the tool
 chmod +x utilux && ./utilux
@@ -42,7 +42,7 @@ utilux                       # Bash CLI: interactive menu + commands
     ├── cache.sh             # Local script caching
     ├── registry.sh          # Script registry (manifest.json)
     ├── loader.sh            # Script download + execution
-    └── ui.sh                # Interactive UI (whiptail)
+    └── ui.sh                # Interactive UI (gum > whiptail > simple)
 
 cli/                         # Go CLI (optional, high-performance)
 ├── cmd/                     # Cobra commands (run, list, search, info, update, cache)
@@ -69,7 +69,7 @@ website/                     # Astro documentation site
 
 - Scripts are lazy-loaded: downloaded on first use, cached locally
 - `manifest.json` contains script metadata + SHA256 hashes for integrity verification
-- Bash CLI uses whiptail for interactive menus
+- Bash CLI uses gum for interactive menus (whiptail fallback)
 - Go CLI uses cobra (commands) + bubbletea (TUI)
 - Both CLIs share the same registry and cache format
 

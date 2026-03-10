@@ -24,8 +24,30 @@ Installation, configuration, and deployment of Utilux across different environme
 **Optional Dependencies**:
 
 - jq (improves JSON parsing)
-- whiptail (interactive menu)
+- gum (modern TUI) or whiptail (legacy)
 - Go 1.22+ (for Go CLI)
+
+**Install gum** ([charmbracelet/gum](https://github.com/charmbracelet/gum)):
+
+```bash
+# macOS/Linux (Homebrew)
+brew install gum
+
+# Arch Linux
+pacman -S gum
+
+# Fedora/EPEL
+dnf install gum
+
+# Alpine
+apk add gum
+
+# Debian/Ubuntu
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+sudo apt update && sudo apt install gum
+```
 
 ### Network Requirements
 
@@ -128,7 +150,7 @@ utilux-go version
 
 ```bash
 sudo apt update
-sudo apt install -y curl bash jq whiptail
+sudo apt install -y curl bash jq  # Optional: install gum for modern TUI
 curl -fsSL https://raw.githubusercontent.com/lamngockhuong/utilux/main/install.sh | sudo bash
 utilux version
 ```

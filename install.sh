@@ -11,6 +11,52 @@ log_success() { echo -e "${GREEN}[OK]${NC} $*"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $*" >&2; }
 log_warn() { echo -e "${RED}[WARN]${NC} $*" >&2; }
 
+# UI helpers (gum > whiptail > simple)
+_has_gum() { command -v gum &>/dev/null; }
+_has_whiptail() { command -v whiptail &>/dev/null; }
+
+ui_menu() {
+  local title="$1"; shift
+  local options=("$@")
+  if _has_gum && [[ -t 0 ]]; then
+    echo "$title" >&2
+    gum choose "${options[@]}"
+  elif _has_whiptail && [[ -t 0 ]]; then
+    local menu_opts=(); local i=1
+    for opt in "${options[@]}"; do menu_opts+=("$i" "$opt"); ((i++)); done
+    local choice=$(whiptail --title "Utilux" --menu "$title" 15 60 5 "${menu_opts[@]}" 3>&1 1>&2 2>&3)
+    [[ $? -eq 0 && -n "$choice" ]] && echo "${options[$((choice-1))]}"
+  else
+    echo "$title" >&2; local i=1
+    for opt in "${options[@]}"; do echo "  $i) $opt" >&2; ((i++)); done
+    read -rp "Select: " choice
+    [[ "$choice" =~ ^[0-9]+$ ]] && echo "${options[$((choice-1))]}"
+  fi
+}
+
+ui_input() {
+  local msg="$1" default="${2:-}"
+  if _has_gum && [[ -t 0 ]]; then
+    gum input --placeholder "$msg" --value "$default"
+  elif _has_whiptail && [[ -t 0 ]]; then
+    whiptail --title "Utilux" --inputbox "$msg" 10 60 "$default" 3>&1 1>&2 2>&3
+  else
+    read -rp "$msg [$default]: " input; echo "${input:-$default}"
+  fi
+}
+
+ui_confirm() {
+  local msg="$1" default="${2:-n}"
+  if _has_gum && [[ -t 0 ]]; then
+    [[ "$default" == "y" ]] && gum confirm "$msg" --default=true || gum confirm "$msg" --default=false
+  elif _has_whiptail && [[ -t 0 ]]; then
+    whiptail --title "Utilux" --yesno "$msg" 10 60
+  else
+    local prompt="[y/N]"; [[ "$default" == "y" ]] && prompt="[Y/n]"
+    read -rp "$msg $prompt " resp; resp="${resp:-$default}"; [[ "$resp" =~ ^[Yy] ]]
+  fi
+}
+
 # Installation paths (constants)
 readonly INSTALL_BIN_DIR="/usr/local/bin"
 readonly INSTALL_LIB_BASE="/usr/local/lib"
@@ -96,7 +142,11 @@ detect_distro() {
 
 # Check and install required packages
 ensure_required_packages() {
-  local packages=("curl" "tar" "gzip" "whiptail" "git")
+  local packages=("curl" "tar" "gzip" "git")
+  # Try to install gum first, fallback to whiptail
+  if ! command -v gum &>/dev/null && ! command -v whiptail &>/dev/null; then
+    packages+=("whiptail")  # gum needs manual install, fallback to whiptail
+  fi
   for package in "${packages[@]}"; do
     if ! command -v "$package" &> /dev/null; then
       log_info "Installing $package..."
@@ -308,45 +358,33 @@ check_existing_installation() {
     log_warn "An application named '$app_name' already exists in your system."
 
     # Ask user what to do
-    local choice=$(whiptail --title "Application Name Conflict" --menu "An application named '$app_name' already exists. What would you like to do?" 15 60 3 \
-      "1" "Remove existing application and install as '$app_name'" \
-      "2" "Install with a different name" \
-      "3" "Cancel installation" 3>&1 1>&2 2>&3)
+    local choice=$(ui_menu "An application named '$app_name' already exists. What would you like to do?" \
+      "Remove existing and install as '$app_name'" \
+      "Install with a different name" \
+      "Cancel installation")
 
-    case $? in
-      0) # User pressed OK
-        case $choice in
-          1) # Remove existing and install as utilux
-            log_info "Removing existing '$app_name'..."
-            rm -f "$INSTALL_BIN_DIR/$app_name"
-            rm -f "$INSTALL_BIN_DIR/$app_name-core"
-            rm -f "$INSTALL_BIN_DIR/$app_name-detect"
-            rm -rf "$INSTALL_LIB_BASE/$app_name"
-            ;;
-          2) # Install with different name
-            app_name=$(whiptail --title "Choose Name" --inputbox "Enter a new name for the application:" 10 60 "$DEFAULT_APP_NAME" 3>&1 1>&2 2>&3)
-            if [ $? -ne 0 ] || [ -z "$app_name" ]; then
-              log_info "Installation cancelled by user."
-              exit 0
-            fi
-            # Check if the new name also exists
-            if command -v "$app_name" &> /dev/null; then
-              log_error "An application named '$app_name' also exists. Please choose a different name."
-              exit 1
-            fi
-            log_info "Will install as '$app_name'"
-            ;;
-          3) # Cancel installation
-            log_info "Installation cancelled by user."
-            exit 0
-            ;;
-        esac
+    case "$choice" in
+      "Remove existing"*) # Remove existing and install as utilux
+        log_info "Removing existing '$app_name'..."
+        rm -f "$INSTALL_BIN_DIR/$app_name"
+        rm -f "$INSTALL_BIN_DIR/$app_name-core"
+        rm -f "$INSTALL_BIN_DIR/$app_name-detect"
+        rm -rf "$INSTALL_LIB_BASE/$app_name"
         ;;
-      1) # User pressed Cancel
-        log_info "Installation cancelled by user."
-        exit 0
+      "Install with"*) # Install with different name
+        app_name=$(ui_input "Enter a new name for the application" "$DEFAULT_APP_NAME")
+        if [ -z "$app_name" ]; then
+          log_info "Installation cancelled by user."
+          exit 0
+        fi
+        # Check if the new name also exists
+        if command -v "$app_name" &> /dev/null; then
+          log_error "An application named '$app_name' also exists. Please choose a different name."
+          exit 1
+        fi
+        log_info "Will install as '$app_name'"
         ;;
-      255) # User pressed ESC
+      *) # Cancel or empty
         log_info "Installation cancelled by user."
         exit 0
         ;;
@@ -392,7 +430,7 @@ main() {
     fi
 
     # Confirm uninstallation
-    if ! whiptail --title "Confirm Uninstallation" --yesno "Are you sure you want to uninstall $app_name?" 10 60; then
+    if ! ui_confirm "Are you sure you want to uninstall $app_name?"; then
       log_info "Uninstallation cancelled by user."
       exit 0
     fi

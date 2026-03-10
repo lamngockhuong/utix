@@ -196,7 +196,7 @@ cmd_info() {
   [[ -n "$tags" ]] && echo "Tags:         $tags"
   echo ""
   if [[ -n "$cached_version" ]]; then
-    echo "Cache status: ${UTILUX_GREEN}cached${UTILUX_NC} (v$cached_version)"
+    echo "Cache status: ${UTILUX_GREEN}cached${UTILUX_NC} ($cached_version)"
   else
     echo "Cache status: not cached"
   fi
@@ -237,7 +237,7 @@ cmd_cache() {
         while read -r name; do
           local ver
           ver=$(cache_version "$name")
-          echo "  - $name (v$ver)"
+          echo "  - $name ($ver)"
         done <<< "$cached_scripts"
       else
         echo "  (none)"
@@ -284,58 +284,45 @@ cmd_config() {
 
 # Command: interactive menu
 cmd_interactive() {
-  if ! _has_whiptail; then
-    die "Interactive mode requires whiptail. Install it or use CLI commands."
+  if ! _has_tui; then
+    die "Interactive mode requires gum or whiptail. Install one or use CLI commands."
   fi
+
+  local actions=("Run a script" "List scripts" "Search scripts" "Script info" "Update scripts" "Cache management" "Configuration" "Exit")
 
   while true; do
     local choice
-    choice=$(whiptail --title "Utilux - Script Aggregator" --menu "Choose an action" 18 60 8 \
-      "1" "Run a script" \
-      "2" "List scripts" \
-      "3" "Search scripts" \
-      "4" "Script info" \
-      "5" "Update scripts" \
-      "6" "Cache management" \
-      "7" "Configuration" \
-      "8" "Exit" 3>&1 1>&2 2>&3)
+    if _has_gum; then
+      choice=$(gum choose --header "Utilux - Choose an action" "${actions[@]}")
+    else
+      choice=$(whiptail --title "Utilux - Script Aggregator" --menu "Choose an action" 18 60 8 \
+        "1" "Run a script" "2" "List scripts" "3" "Search scripts" "4" "Script info" \
+        "5" "Update scripts" "6" "Cache management" "7" "Configuration" "8" "Exit" 3>&1 1>&2 2>&3)
+      [[ $? -ne 0 ]] && exit 0
+      case $choice in 1) choice="Run a script";; 2) choice="List scripts";; 3) choice="Search scripts";;
+        4) choice="Script info";; 5) choice="Update scripts";; 6) choice="Cache management";;
+        7) choice="Configuration";; 8) choice="Exit";; esac
+    fi
 
-    case $? in
-      0)
-        case $choice in
-          1) _interactive_run ;;
-          2) _interactive_list ;;
-          3) _interactive_search ;;
-          4) _interactive_info ;;
-          5) cmd_update --all; ui_message "Update" "All scripts updated!" ;;
-          6) _interactive_cache ;;
-          7) _interactive_config ;;
-          8) exit 0 ;;
-        esac
-        ;;
-      *) exit 0 ;;
+    case "$choice" in
+      "Run a script") _interactive_run ;;
+      "List scripts") _interactive_list ;;
+      "Search scripts") _interactive_search ;;
+      "Script info") _interactive_info ;;
+      "Update scripts") cmd_update --all; _tui_msg "Update" "All scripts updated!" ;;
+      "Cache management") _interactive_cache ;;
+      "Configuration") _interactive_config ;;
+      "Exit"|"") exit 0 ;;
     esac
   done
 }
 
 _interactive_run() {
   registry_fetch
-  local scripts
-  scripts=$(registry_list)
-
-  local menu_opts=()
-  local i=1
-  for s in $scripts; do
-    menu_opts+=("$s" "")
-    ((i++))
-  done
-
-  local selected
-  selected=$(whiptail --title "Run Script" --menu "Select script to run" 20 60 12 "${menu_opts[@]}" 3>&1 1>&2 2>&3)
-
-  if [[ $? -eq 0 && -n "$selected" ]]; then
-    local args
-    args=$(whiptail --title "Arguments" --inputbox "Enter arguments (optional):" 10 60 3>&1 1>&2 2>&3)
+  local scripts=($(registry_list))
+  local selected=$(_tui_choose "Select script to run" "${scripts[@]}")
+  if [[ -n "$selected" ]]; then
+    local args=$(_tui_input "Enter arguments (optional)")
     clear
     cmd_run "$selected" $args
     echo ""
@@ -345,77 +332,76 @@ _interactive_run() {
 
 _interactive_list() {
   registry_fetch
-  local output
-  output=$(cmd_list 2>&1)
-  whiptail --title "Available Scripts" --scrolltext --msgbox "$output" 24 70
+  local output=$(cmd_list 2>&1)
+  _tui_msg "Available Scripts" "$output"
 }
 
 _interactive_search() {
-  local query
-  query=$(whiptail --title "Search" --inputbox "Enter search query:" 10 60 3>&1 1>&2 2>&3)
-
-  if [[ $? -eq 0 && -n "$query" ]]; then
-    local output
-    output=$(cmd_search "$query" 2>&1)
-    whiptail --title "Search Results" --scrolltext --msgbox "$output" 20 70
+  local query=$(_tui_input "Enter search query")
+  if [[ -n "$query" ]]; then
+    local output=$(cmd_search "$query" 2>&1)
+    _tui_msg "Search Results" "$output"
   fi
 }
 
 _interactive_info() {
   registry_fetch
-  local scripts
-  scripts=$(registry_list)
-
-  local menu_opts=()
-  for s in $scripts; do
-    menu_opts+=("$s" "")
-  done
-
-  local selected
-  selected=$(whiptail --title "Script Info" --menu "Select script" 20 60 12 "${menu_opts[@]}" 3>&1 1>&2 2>&3)
-
-  if [[ $? -eq 0 && -n "$selected" ]]; then
-    local output
-    output=$(cmd_info "$selected" 2>&1 | sed 's/\x1b\[[0-9;]*m//g')
-    whiptail --title "$selected" --scrolltext --msgbox "$output" 20 70
+  local scripts=($(registry_list))
+  local selected=$(_tui_choose "Select script" "${scripts[@]}")
+  if [[ -n "$selected" ]]; then
+    local output=$(cmd_info "$selected" 2>&1 | sed 's/\x1b\[[0-9;]*m//g')
+    _tui_msg "$selected" "$output"
   fi
 }
 
 _interactive_cache() {
-  local choice
-  choice=$(whiptail --title "Cache Management" --menu "Select action" 15 60 4 \
-    "1" "List cached scripts" \
-    "2" "Clear all cache" \
-    "3" "Show cache size" \
-    "4" "Back" 3>&1 1>&2 2>&3)
-
-  case $choice in
-    1)
-      local output
-      output=$(cmd_cache list 2>&1)
-      whiptail --title "Cached Scripts" --msgbox "$output" 15 60
-      ;;
-    2)
-      if whiptail --title "Confirm" --yesno "Clear all cached scripts?" 8 40; then
-        cache_clear
-        whiptail --title "Cache" --msgbox "Cache cleared!" 8 40
-      fi
-      ;;
-    3)
-      whiptail --title "Cache Size" --msgbox "Cache size: $(cache_size_human)" 8 40
-      ;;
+  local actions=("List cached scripts" "Clear all cache" "Show cache size" "Back")
+  local choice=$(_tui_choose "Cache Management" "${actions[@]}")
+  case "$choice" in
+    "List cached"*) _tui_msg "Cached Scripts" "$(cmd_cache list 2>&1)" ;;
+    "Clear all"*) _tui_confirm "Clear all cached scripts?" && { cache_clear; _tui_msg "Cache" "Cache cleared!"; } ;;
+    "Show cache"*) _tui_msg "Cache Size" "Cache size: $(cache_size_human)" ;;
   esac
 }
 
 _interactive_config() {
-  local output
-  output=$(cmd_config 2>&1)
-  whiptail --title "Configuration" --msgbox "$output" 15 70
+  _tui_msg "Configuration" "$(cmd_config 2>&1)"
 }
 
-# Check has_whiptail (for interactive)
-_has_whiptail() {
-  has_cmd whiptail
+# Check TUI availability
+_has_gum() { has_cmd gum; }
+_has_whiptail() { has_cmd whiptail; }
+_has_tui() { _has_gum || _has_whiptail; }
+
+# TUI helpers (gum > whiptail)
+_tui_choose() {
+  local title="$1"; shift
+  if _has_gum; then
+    gum choose --header "$title" "$@"
+  else
+    local opts=() i=1
+    for o in "$@"; do opts+=("$i" "$o"); ((i++)); done
+    local c=$(whiptail --title "Utilux" --menu "$title" 20 60 12 "${opts[@]}" 3>&1 1>&2 2>&3)
+    [[ $? -eq 0 && -n "$c" ]] && { shift $((c-1)); echo "$1"; }
+  fi
+}
+_tui_input() {
+  local msg="$1" default="${2:-}"
+  if _has_gum; then gum input --placeholder "$msg" --value "$default"
+  else whiptail --title "Utilux" --inputbox "$msg" 10 60 "$default" 3>&1 1>&2 2>&3; fi
+}
+_tui_msg() {
+  local title="$1" msg="$2"
+  # Strip ANSI codes for TUI display
+  msg=$(echo -e "$msg" | sed 's/\x1b\[[0-9;]*m//g')
+  if _has_gum; then
+    echo -e "[$title]\n\n$msg" | gum style --border rounded --padding "1 2" --border-foreground 212
+  else whiptail --title "$title" --msgbox "$msg" 15 70; fi
+}
+_tui_confirm() {
+  local msg="$1"
+  if _has_gum; then gum confirm "$msg"
+  else whiptail --title "Utilux" --yesno "$msg" 8 40; fi
 }
 
 # Main command router
@@ -453,7 +439,7 @@ main() {
       ;;
     "")
       # No command - run interactive mode or show help
-      if [[ -t 0 ]] && _has_whiptail; then
+      if [[ -t 0 ]] && _has_tui; then
         cmd_interactive
       else
         show_help

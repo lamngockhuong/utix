@@ -21,7 +21,7 @@
 - [x] Local caching mechanism (~/.utilux)
 - [x] Multi-distro support (Ubuntu/Debian, Alpine, Fedora)
 - [x] 10 production-ready scripts across 4 categories
-- [x] Interactive whiptail menu (Bash CLI)
+- [x] Interactive gum TUI (Bash CLI)
 - [x] Offline mode support
 - [x] Installation script with multiple modes
 - [x] Astro documentation website

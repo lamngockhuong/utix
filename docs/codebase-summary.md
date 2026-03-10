@@ -28,7 +28,7 @@ utilux/
 │   ├── core.sh              # Logging, helpers, error handling
 │   ├── loader.sh            # Script download/execution
 │   ├── registry.sh          # Manifest fetching/parsing
-│   └── ui.sh                # Interactive whiptail TUI
+│   └── ui.sh                # Interactive TUI (gum > whiptail)
 │
 ├── registry/                 # Script registry
 │   ├── automation/          # Automation scripts
@@ -420,7 +420,7 @@ detect_distro() {
 - **bash** 4.0+ (required)
 - **curl** (required for downloads)
 - **jq** (optional, improves JSON parsing)
-- **whiptail** (optional, enables interactive menu)
+- **gum** (optional, modern TUI) or **whiptail** (legacy fallback)
 
 ### Build Dependencies
 

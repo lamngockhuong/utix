@@ -118,7 +118,7 @@ utilux list
 FROM ubuntu:22.04
 
 RUN apt-get update && \
-    apt-get install -y curl bash jq whiptail && \
+    apt-get install -y curl bash jq && \
     rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://raw.githubusercontent.com/lamngockhuong/utilux/main/install.sh | bash
