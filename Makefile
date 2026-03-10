@@ -19,7 +19,7 @@ endif
 	-v $(PROJECT_DIR):/app \
 	--workdir /app \
 	$(if $(DISTRO),$(DISTRO),$(DEFAULT_DISTRO)) \
-	sh
+	bash
 
 # Clean temporary or generated files
 clean:

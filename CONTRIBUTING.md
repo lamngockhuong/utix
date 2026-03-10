@@ -63,8 +63,9 @@ make dev DISTRO=alpine      # Alpine Linux
 make dev DISTRO=fedora      # Fedora
 
 # Install dependencies (inside container)
-# Alpine
+# Alpine (bash required for command history)
 apk add --no-cache bash curl gum jq
+bash  # Switch to bash for arrow key history
 
 # Ubuntu/Debian
 apt update && apt install -y curl jq
