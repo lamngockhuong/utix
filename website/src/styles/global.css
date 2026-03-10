@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
@@ -45,4 +46,23 @@ code, pre, .font-mono {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Prose dark theme customizations */
+.prose h2 {
+  border-bottom: 1px solid var(--color-surface);
+  padding-bottom: 0.5rem;
+}
+
+.prose pre {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.prose th {
+  background-color: var(--color-surface);
+}
+
+.prose th, .prose td {
+  border-color: var(--color-surface);
 }

@@ -104,6 +104,16 @@ process_script() {
     content=$(echo "$content" | sed '1,/^---$/d' | sed '1,/^---$/d')
   fi
 
+  # Skip first h1 and following description paragraph (already shown in page header)
+  content=$(echo "$content" | awk '
+    BEGIN { state=0 }
+    state==0 && /^# / { state=1; next }
+    state==1 && /^$/ { state=2; next }
+    state==2 && /^[^#]/ && !/^$/ { state=3; next }
+    state==2 && /^$/ { state=3 }
+    { print }
+  ')
+
   echo "$content" >> "$output_file"
 
   log_success "Generated: $output_file"

@@ -1,30 +1,38 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CopyButton from '../../components/CopyButton.astro';
+import { getCollection } from 'astro:content';
 import manifest from '../../../../registry/manifest.json';
 
-export function getStaticPaths() {
-  return manifest.scripts.map(script => ({
-    params: { slug: script.name },
+export async function getStaticPaths() {
+  const scripts = await getCollection('scripts');
+
+  return scripts.map(script => ({
+    params: { slug: script.slug },
     props: { script }
   }));
 }
 
 const { script } = Astro.props;
-const runCommand = `utilux run ${script.name}`;
+const { Content } = await script.render();
+const { title, description, category, version, author, tags, requires } = script.data;
+
+// Get file path from manifest for GitHub link
+const manifestScript = manifest.scripts.find(s => s.name === script.slug);
+const runCommand = `utilux run ${script.slug}`;
 ---
 
-<BaseLayout title={script.name} description={script.description}>
+<BaseLayout title={title} description={description}>
   <section class="py-12">
     <div class="container max-w-3xl">
       <a href="/catalog" class="text-primary hover:text-accent mb-4 inline-block transition-colors duration-200 cursor-pointer">&larr; Back to Catalog</a>
 
       <div class="flex items-start justify-between gap-4 mb-6">
-        <h1 class="text-3xl font-bold">{script.name}</h1>
-        <span class="px-3 py-1 bg-surface rounded-lg text-sm text-muted border border-slate-700/50">{script.category}</span>
+        <h1 class="text-3xl font-bold">{title}</h1>
+        <span class="px-3 py-1 bg-surface rounded-lg text-sm text-muted border border-slate-700/50">{category}</span>
       </div>
 
-      <p class="text-xl text-text/90 mb-8">{script.description}</p>
+      <p class="text-xl text-text/90 mb-8">{description}</p>
 
       <!-- Run command -->
       <div class="bg-surface rounded-xl p-4 mb-8 border border-slate-700/50">
@@ -39,23 +47,23 @@ const runCommand = `utilux run ${script.name}`;
       <div class="grid md:grid-cols-2 gap-6 mb-8">
         <div class="bg-surface/50 rounded-xl p-4 border border-slate-700/50">
           <h3 class="font-semibold mb-2 text-muted">Version</h3>
-          <p class="text-text">{script.version}</p>
+          <p class="text-text">{version}</p>
         </div>
         <div class="bg-surface/50 rounded-xl p-4 border border-slate-700/50">
           <h3 class="font-semibold mb-2 text-muted">Author</h3>
-          <p class="text-text">{script.author}</p>
+          <p class="text-text">{author}</p>
         </div>
-        {script.requires && script.requires.length > 0 && (
+        {requires && requires.length > 0 && (
           <div class="bg-surface/50 rounded-xl p-4 border border-slate-700/50">
             <h3 class="font-semibold mb-2 text-muted">Requirements</h3>
-            <p class="text-text">{script.requires.join(', ')}</p>
+            <p class="text-text">{requires.join(', ')}</p>
           </div>
         )}
-        {script.tags && script.tags.length > 0 && (
+        {tags && tags.length > 0 && (
           <div class="bg-surface/50 rounded-xl p-4 border border-slate-700/50">
             <h3 class="font-semibold mb-2 text-muted">Tags</h3>
             <div class="flex flex-wrap gap-1">
-              {script.tags.map((tag: string) => (
+              {tags.map((tag: string) => (
                 <span class="px-2 py-0.5 bg-surface rounded-md text-sm text-muted">{tag}</span>
               ))}
             </div>
@@ -63,17 +71,24 @@ const runCommand = `utilux run ${script.name}`;
         )}
       </div>
 
-      <!-- Source link -->
-      <div class="border-t border-slate-700/50 pt-6">
-        <a
-          href={`https://github.com/lamngockhuong/utilux/blob/main/registry/${script.file}`}
-          target="_blank"
-          rel="noopener"
-          class="text-primary hover:text-accent transition-colors duration-200 cursor-pointer font-medium"
-        >
-          View source on GitHub &rarr;
-        </a>
+      <!-- Markdown Content -->
+      <div class="prose prose-invert prose-slate max-w-none mb-8">
+        <Content />
       </div>
+
+      <!-- Source link -->
+      {manifestScript && (
+        <div class="border-t border-slate-700/50 pt-6">
+          <a
+            href={`https://github.com/lamngockhuong/utilux/blob/main/registry/${manifestScript.file}`}
+            target="_blank"
+            rel="noopener"
+            class="text-primary hover:text-accent transition-colors duration-200 cursor-pointer font-medium"
+          >
+            View source on GitHub &rarr;
+          </a>
+        </div>
+      )}
     </div>
   </section>
 </BaseLayout>
