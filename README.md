@@ -127,4 +127,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute.
 
 ## License
 
-MIT
+BSD-3-Clause
