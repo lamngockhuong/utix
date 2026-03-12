@@ -39,3 +39,15 @@ lint-go:
 
 # Lint all
 lint: lint-bash lint-go
+
+# Format bash scripts
+fmt-bash:
+	@command -v shfmt >/dev/null || { echo "Install shfmt: sudo apt install shfmt"; exit 1; }
+	shfmt -w -i 2 -ci -bn utix lib/ install.sh package.sh generate-manifest.sh
+
+# Format Go CLI
+fmt-go:
+	$(MAKE) -C cli fmt
+
+# Format all
+fmt: fmt-bash fmt-go
