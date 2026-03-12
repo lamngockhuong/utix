@@ -104,7 +104,7 @@ func (m *Manager) download(script *registry.Script) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to download docs for %s: %w", script.Name, err)
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("HTTP %d downloading docs for %s", resp.StatusCode, script.Name)

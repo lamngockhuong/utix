@@ -78,7 +78,7 @@ func (l *Loader) download(script *registry.Script) error {
 	if err != nil {
 		return fmt.Errorf("failed to download %s: %w", script.Name, err)
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("HTTP %d downloading %s", resp.StatusCode, script.Name)

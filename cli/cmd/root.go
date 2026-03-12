@@ -174,7 +174,7 @@ func runInteractiveMode() error {
 
 		// Pause before returning to menu
 		fmt.Print("\nPress Enter to continue...")
-		fmt.Scanln()
+		_, _ = fmt.Scanln()
 	}
 }
 
@@ -218,7 +218,7 @@ func listScripts() error {
 func searchScripts() error {
 	fmt.Print("\nEnter search term: ")
 	var term string
-	fmt.Scanln(&term)
+	_, _ = fmt.Scanln(&term)
 	if term == "" {
 		return nil
 	}
@@ -350,7 +350,7 @@ func manageConfigInteractive() error {
 		fmt.Printf("Current: %s\n", cfg.RegistryURL)
 		fmt.Print("Enter new registry URL (empty to cancel): ")
 		var url string
-		fmt.Scanln(&url)
+		_, _ = fmt.Scanln(&url)
 		if url != "" {
 			if err := cfg.Set("UTIX_REGISTRY_URL", url); err != nil {
 				return err

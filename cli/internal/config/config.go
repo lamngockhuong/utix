@@ -46,7 +46,7 @@ func (c *Config) Load() error {
 		}
 		return err
 	}
-	defer file.Close()
+	defer file.Close() //nolint:errcheck
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {

@@ -2,7 +2,7 @@ VERSION ?= 1.0.0
 BINARY = utix-go
 LDFLAGS = -ldflags "-s -w -X github.com/lamngockhuong/utix/cli/cmd.Version=$(VERSION)"
 
-.PHONY: build build-all clean test
+.PHONY: build build-all clean test lint lint-fix fmt
 
 # Build for current platform
 build:
@@ -41,3 +41,21 @@ install: build
 size: build-optimized
 	@ls -lh $(BINARY)
 	@file $(BINARY)
+
+GOLANGCI_LINT_VERSION ?= v2.11.3
+GOLANGCI_LINT = $(shell go env GOPATH)/bin/golangci-lint
+
+# Lint code
+lint:
+	@test -x $(GOLANGCI_LINT) || go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
+	$(GOLANGCI_LINT) run
+
+# Lint and fix
+lint-fix:
+	@test -x $(GOLANGCI_LINT) || go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
+	$(GOLANGCI_LINT) run --fix
+
+# Format code
+fmt:
+	go fmt ./...
+	gofmt -s -w .

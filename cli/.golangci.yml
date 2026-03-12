@@ -2,18 +2,21 @@ version: "2"
 
 linters:
   default: standard
-  enable:
-    - errcheck
 
 linters-settings:
   errcheck:
-    # Ignore intentionally unchecked errors in defer statements
     exclude-functions:
+      - io.Close
       - (io.Closer).Close
-      - (net/http.Response).Body.Close
       - (*os.File).Close
-      - fmt.Scanln
-      - fmt.Scan
+      - (*net/http.Response.Body).Close
+      - (net/http.ResponseWriter).Write
+      - fmt.Fprint
+      - fmt.Fprintf
+      - fmt.Fprintln
       - fmt.Print
-      - fmt.Println
       - fmt.Printf
+      - fmt.Println
+      - fmt.Scan
+      - fmt.Scanf
+      - fmt.Scanln
