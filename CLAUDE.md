@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Utix is a Linux utility management tool written in bash. It provides a unified interface for package management across Ubuntu/Debian, Alpine, and Fedora distributions. The tool supports installing packages from system repos, GitHub releases, and direct URLs.
+Utix is a Unix utility management tool written in bash. It provides a unified interface for package management across Linux (Ubuntu/Debian, Alpine, Fedora) and macOS. The tool supports installing packages from system repos, GitHub releases, and direct URLs.
 
 ## Development Commands
 

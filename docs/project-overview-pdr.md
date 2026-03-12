@@ -2,7 +2,7 @@
 
 ## Project Vision
 
-Utix is a unified Linux utility management system that provides curated, production-ready scripts across Ubuntu/Debian, Alpine, and Fedora distributions. The project aims to eliminate repetitive system administration tasks through a lazy-loading script registry accessible via both Bash and Go CLI interfaces.
+Utix is a unified Unix utility management system that provides curated, production-ready scripts across Linux (Ubuntu/Debian, Alpine, Fedora) and macOS. The project aims to eliminate repetitive system administration tasks through a lazy-loading script registry accessible via both Bash and Go CLI interfaces.
 
 ## Target Users
 

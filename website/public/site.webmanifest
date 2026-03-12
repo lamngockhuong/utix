@@ -1,7 +1,7 @@
 {
   "name": "Utix",
   "short_name": "Utix",
-  "description": "Lightweight Linux utility scripts with lazy loading",
+  "description": "Lightweight Unix utility scripts with lazy loading",
   "icons": [
     {
       "src": "/icon-192.png",
