@@ -27,3 +27,15 @@ endif
 # Clean temporary or generated files
 clean:
 	rm -f *.log *.tmp
+
+# Lint all bash scripts
+lint-bash:
+	@command -v shellcheck >/dev/null || { echo "Install shellcheck: sudo apt install shellcheck"; exit 1; }
+	shellcheck -x -S warning utix lib/*.sh install.sh package.sh generate-manifest.sh
+
+# Lint Go CLI
+lint-go:
+	$(MAKE) -C cli lint
+
+# Lint all
+lint: lint-bash lint-go
